@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import Button from "@/app/components/button/page";
 
 export default function Home() {
