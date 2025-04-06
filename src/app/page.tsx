@@ -1,6 +1,6 @@
 'use client';
 
-import Button from "@/app/components/button/page";
+import Button from "@/app/components/Button";
 
 export default function Home() {
   return (
