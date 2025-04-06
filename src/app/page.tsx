@@ -1,4 +1,4 @@
-import Button from "@/app/components/Button";
+// import Button from "@/app/components/Button";
 import { createClient } from '@/utils/supabase/server'
 
 export const revalidate = 0;
