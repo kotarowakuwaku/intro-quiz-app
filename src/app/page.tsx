@@ -1,26 +1,33 @@
-// import Button from "@/app/components/Button";
-import { createClient } from '@/utils/supabase/server'
+"use client";
 
-export const revalidate = 0;
+import { useState, useEffect, useRef, use } from "react";
+import YoutubePlayer from "@/app/components/YoutubePlayer";
 
-export default async function Home() {
-  const supabase = await createClient();
+export default function Home() {
+  const videoIds = ["dKPye_tGXFM", "daSwx7663RQ", "6sJ7vXe_oMU"];
+  const [currentVideoId, setCurrentVideoId] = useState(videoIds[0]);
+  const [isStopQuiz, setIsStopQuiz] = useState(false); // ステートを追加
 
-  const { data: questions, error } = await supabase
-    .from('questionCollection')
-    .select()
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  // イントロ終了時に次の動画をセット
+  const onIntroEnd = () => {
+    const nextIndex = (videoIds.indexOf(currentVideoId) + 1) % videoIds.length;
+    if (nextIndex === 0) {
+      console.log("All videos played. Restarting from the first video.");
+      setIsStopQuiz(true); // イントロ終了時にクイズをストップ
+    }else{
+    console.log("Next video ID:", videoIds[nextIndex]);
+    setCurrentVideoId(videoIds[nextIndex]);
+    }
+  };
 
   return (
-    <>
-      <main>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
-        {/* <Button label="Click me" onClick={() => alert("Hello World")} /> */}
-        <pre>{JSON.stringify(questions, null, 2)}</pre>
-      </main>
-    </>
+    <main>
+      <YoutubePlayer
+        videoId={currentVideoId}
+        introDuration={5}
+        onIntroEnd={onIntroEnd}
+        isStopQuiz={isStopQuiz} // 追加したステートを渡す
+      />
+    </main>
   );
 }
