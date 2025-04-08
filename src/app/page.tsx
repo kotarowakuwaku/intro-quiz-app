@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef, use } from "react";
+import { useState } from "react";
 import YoutubePlayer from "@/app/components/YoutubePlayer";
-import Button from "@/app/components/Button";
 
 export default function Home() {
   const videoIds = ["dKPye_tGXFM", "daSwx7663RQ", "6sJ7vXe_oMU"];
