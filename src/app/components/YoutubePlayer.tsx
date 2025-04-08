@@ -1,11 +1,10 @@
 'use client';
 import { useEffect, useRef, useState } from "react";
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
 type YoutubePlayerProps = {
   videoId: string;
   introDuration: number;
-  isStartQuiz?: boolean;
-  setStartQuiz?: (value: boolean) => void;
 };
 
 declare global {
@@ -15,7 +14,7 @@ declare global {
   }
 }
 
-const YoutubePlayer = ({ videoId, introDuration, isStartQuiz, setStartQuiz }: YoutubePlayerProps) => {
+const YoutubePlayer = ({ videoId, introDuration}: YoutubePlayerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<any>(null);
   const [playerReady, setPlayerReady] = useState(false);
@@ -58,48 +57,55 @@ const YoutubePlayer = ({ videoId, introDuration, isStartQuiz, setStartQuiz }: Yo
   };
 
   // videoId が変わったとき動画を切り替える
-  useEffect(() => {
-    if (
-      playerRef.current &&
-      playerReady &&
-      typeof playerRef.current.loadVideoById === "function"
-    ) {
-      playerRef.current.loadVideoById(videoId);
-      playerRef.current.playVideo();
-  
-      const timeout = setTimeout(() => {
-        playerRef.current.mute();
-        playerRef.current.stopVideo();
-      }, introDuration * 1000);
-  
-      return () => clearTimeout(timeout); // クリーンアップ
-    }
-  }, [videoId, playerReady]);
-  
-  
+  // 今は使わない
+  // useEffect(() => {
+  //   if (
+  //     playerRef.current &&
+  //     playerReady &&
+  //     typeof playerRef.current.loadVideoById === "function"
+  //   ) {
+  //     playerRef.current.loadVideoById(videoId);
+  //     playerRef.current.playVideo();
+
+  //     const timeout = setTimeout(() => {
+  //       playerRef.current.mute();
+  //       playerRef.current.stopVideo();
+  //     }, introDuration * 1000);
+
+  //     return () => clearTimeout(timeout); // クリーンアップ
+  //   }
+  // }, [videoId, playerReady]);
+
+
 
   const handlePlay = () => {
-    setStartQuiz && setStartQuiz(true);
     if (playerRef.current && playerReady) {
+      playerRef.current.seekTo(0); // 最初に戻す
+      playerRef.current.unMute(); // 念のため音声も有効化
       playerRef.current.playVideo();
 
       setTimeout(() => {
-        playerRef.current.mute();
-        playerRef.current.stopVideo();
+        playerRef.current.pauseVideo(); // 再生を一時停止（stopVideoだと再生できなくなることがある）
       }, introDuration * 1000);
     }
   };
 
+
   return (
-    <div>
-      <div ref={containerRef}></div>
-      {
-        !isStartQuiz && (
-          <div>
-            <button onClick={handlePlay}>Start Video</button>
-          </div>
-        )
-      }
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <div style={{ position: "absolute", width: "95%", height: "95%", zIndex:1 }} ref={containerRef}></div>
+      <button style={{
+        backgroundColor: "blue",
+        position: "absolute",
+        top: "0",
+        left: "0",
+        width: "100%",
+        height: "100%",
+        border: "none",
+        zIndex: 10,
+      }} onClick={handlePlay}>
+        <PlayCircleIcon style={{ fontSize: "50px", color: "blue", backgroundColor:"white", border:"none" }} />
+      </button>
     </div>
   );
 };
