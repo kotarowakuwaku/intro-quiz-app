@@ -5,7 +5,7 @@ import YoutubePlayer from "@/app/components/YoutubePlayer";
 
 export default function Home() {
   const videoIds = ["dKPye_tGXFM", "daSwx7663RQ", "6sJ7vXe_oMU"];
-  const [currentVideoId, setCurrentVideoId] = useState(videoIds[0]);
+  const [currentVideoId, ] = useState(videoIds[0]);
   // const [isGameStarted, setIsGameStarted] = useState(false);
   // const currentVideoIndex = useRef(0);
 

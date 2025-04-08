@@ -16,7 +16,7 @@ declare global {
 
 const YoutubePlayer = ({ videoId, introDuration}: YoutubePlayerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YT.Player | null>(null);
   const [playerReady, setPlayerReady] = useState(false);
 
   // 初回のみ YouTube API をロード
@@ -80,12 +80,14 @@ const YoutubePlayer = ({ videoId, introDuration}: YoutubePlayerProps) => {
 
   const handlePlay = () => {
     if (playerRef.current && playerReady) {
-      playerRef.current.seekTo(0); // 最初に戻す
+      playerRef.current.seekTo(0, true); // 最初に戻す
       playerRef.current.unMute(); // 念のため音声も有効化
       playerRef.current.playVideo();
 
       setTimeout(() => {
-        playerRef.current.pauseVideo(); // 再生を一時停止（stopVideoだと再生できなくなることがある）
+        if (playerRef.current) {
+          playerRef.current.pauseVideo(); // 再生を一時停止（stopVideoだと再生できなくなることがある）
+        }
       }, introDuration * 1000);
     }
   };
