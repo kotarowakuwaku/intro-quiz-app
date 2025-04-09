@@ -1,26 +1,37 @@
-// import Button from "@/app/components/Button";
-import { createClient } from '@/utils/supabase/server'
+"use client";
 
-export const revalidate = 0;
+import { useState } from "react";
+import YoutubePlayer from "@/app/components/YoutubePlayer";
 
-export default async function Home() {
-  const supabase = await createClient();
+export default function Home() {
+  const videoIds = ["dKPye_tGXFM", "daSwx7663RQ", "6sJ7vXe_oMU"];
+  const [currentVideoId, ] = useState(videoIds[0]);
+  // const [isGameStarted, setIsGameStarted] = useState(false);
+  // const currentVideoIndex = useRef(0);
 
-  const { data: questions, error } = await supabase
-    .from('questionCollection')
-    .select()
+  // 使わない
+  // const onIntroEnd = () => {
+  //   const nextIndex = (videoIds.indexOf(currentVideoId) + 1) % videoIds.length;
+  //   if (nextIndex === 0) {
+  //     console.log("All videos played. Restarting from the first video.");
+  //   } else {
+  //     console.log("Next video ID:", videoIds[nextIndex]);
+  //     setCurrentVideoId(videoIds[nextIndex]);
+  //     currentVideoIndex.current = nextIndex;
+  //     console.log(currentVideoId);
+  //   }
+  // };
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
-    <>
-      <main>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
-        {/* <Button label="Click me" onClick={() => alert("Hello World")} /> */}
-        <pre>{JSON.stringify(questions, null, 2)}</pre>
-      </main>
-    </>
+    <main style={{width:"100vw"}}>
+      <div style={{ display: "flex", justifyContent: "center", width: "50px", height: "50px" }}>
+        <YoutubePlayer
+          key={currentVideoId}
+          videoId={currentVideoId}
+          introDuration={5}
+        />
+      </div>
+    </main>
   );
 }
