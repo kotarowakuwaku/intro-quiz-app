@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import YoutubePlayer from "@/app/components/YoutubePlayer";
-import TextInput from "@/app/components/TextInput";
 import Quiz from "@/app/components/Quiz";
 
 export default function Home() {
