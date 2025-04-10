@@ -60,6 +60,7 @@ const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
           mute: 0,
         },
       });
+      console.log(player);
     };
 
     initPlayer();

@@ -7,7 +7,7 @@ import Button from '@/app/components/Button';
 
 const supabase = createClient();
 
-export default function page() {
+export default function Page() {
     const [questions, setQuestions] = useState<
         {
             videoId: string;

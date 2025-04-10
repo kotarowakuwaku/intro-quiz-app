@@ -42,7 +42,7 @@ export default function Home() {
       {checkInput.map((item, index) => {
         return (
           <div key={index} style={{ display: "flex", justifyContent: "center", width:"60%" }}>
-            <Quiz title={`${index + 1}問目`} videoId={item.videoId} introDuration={5} value={item.value} onChange={(newValue) => {
+            <Quiz title={`${index + 1}問目`} videoId={item.videoId} introDuration={5} id={index} value={item.value} onChange={(newValue) => {
               const newCheckInput = [...checkInput];
               newCheckInput[index].value = newValue;
               setCheckInput(newCheckInput);
