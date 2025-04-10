@@ -46,7 +46,7 @@ const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
 
       if (!containerRef.current) return;
 
-      const player = new window.YT.Player(containerRef.current, {
+      playerRef.current = new window.YT.Player(containerRef.current, {
         videoId,
         events: {
           onReady: (event) => {
@@ -60,7 +60,7 @@ const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
           mute: 0,
         },
       });
-      console.log(player);
+      
     };
 
     initPlayer();
