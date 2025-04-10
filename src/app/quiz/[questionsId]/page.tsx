@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Quiz from "@/app/components/Quiz";
 import { createClient } from "@/utils/supabase/client";
 import Button from '@/app/components/Button';
+import { useRouter } from "next/navigation";
 
 const supabase = createClient();
 
@@ -17,6 +18,7 @@ export default function Page() {
         }[]>
         ([]);
     const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
         const getPosts = async () => {
@@ -71,6 +73,7 @@ export default function Page() {
             <Button label="結果を見る" onClick={() => {
                 console.log(questions);
                 localStorage.setItem("quizResults", JSON.stringify(questions));
+                router.push("/result");
             }} />
         </main>
     );
