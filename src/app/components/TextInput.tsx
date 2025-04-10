@@ -3,10 +3,10 @@ import React from 'react'
 import TextField from '@mui/material/TextField';
 import { TextInputProps } from '@/types/textInputProps';
 
-const TextInput = ({ value, onChange }: TextInputProps) => {
+const TextInput = ({ id, value, onChange }: TextInputProps) => {
     return (
         <>
-            <TextField id="outlined-basic" label="回答欄" variant="outlined" value={value} onChange={(e) => onChange(e.target.value)} fullWidth
+            <TextField id={id.toString()} label="回答欄" variant="outlined" value={value} onChange={(e) => onChange(e.target.value)} fullWidth
                 sx={{
                     width: "100%",
                     height: "100%",
