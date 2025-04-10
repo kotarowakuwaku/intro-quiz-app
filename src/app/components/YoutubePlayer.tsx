@@ -12,6 +12,28 @@ declare global {
   }
 }
 
+const loadYouTubeAPI = () => {
+  return new Promise<void>((resolve) => {
+    if (window.YT && window.YT.Player) {
+      resolve();
+    } else {
+      if (!window._youtubeReadyCallbacks) {
+        window._youtubeReadyCallbacks = [];
+        const tag = document.createElement("script");
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(tag);
+
+        window.onYouTubeIframeAPIReady = () => {
+          window._youtubeReadyCallbacks?.forEach(cb => cb());
+          window._youtubeReadyCallbacks = [];
+        };
+      }
+      window._youtubeReadyCallbacks.push(() => resolve());
+    }
+  });
+};
+
+
 const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YT.Player | null>(null);
@@ -19,13 +41,16 @@ const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    const loadPlayer = () => {
+    const initPlayer = async () => {
+      await loadYouTubeAPI();
+
       if (!containerRef.current) return;
 
       playerRef.current = new window.YT.Player(containerRef.current, {
         videoId,
         events: {
-          onReady: () => {
+          onReady: (event) => {
+            playerRef.current = event.target;
             setPlayerReady(true);
           },
         },
@@ -35,29 +60,26 @@ const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
           mute: 0,
         },
       });
+      
     };
 
-    if (window.YT && window.YT.Player) {
-      loadPlayer();
-    } else {
-      if (!window._youtubeReadyCallbacks) {
-        window._youtubeReadyCallbacks = [];
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag?.parentNode?.insertBefore(tag, firstScriptTag);
+    initPlayer();
 
-        window.onYouTubeIframeAPIReady = () => {
-          window._youtubeReadyCallbacks?.forEach(cb => cb());
-          window._youtubeReadyCallbacks = [];
-        };
-      }
-      window._youtubeReadyCallbacks.push(loadPlayer);
-    }
+    return () => {
+      playerRef.current?.destroy();
+      playerRef.current = null;
+      setPlayerReady(false);
+    };
   }, [videoId]);
 
+
+
   const handlePlay = () => {
-    if (playerRef.current && playerReady) {
+    if (
+      playerRef.current &&
+      playerReady &&
+      typeof playerRef.current.seekTo === 'function'
+    ) {
       setIsPlaying(true);
       playerRef.current.seekTo(0, true);
       playerRef.current.unMute();
@@ -67,8 +89,11 @@ const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
         playerRef.current?.pauseVideo();
         setIsPlaying(false);
       }, introDuration * 1000);
+    } else {
+      console.warn("Player not ready or seekTo missing", playerRef.current);
     }
   };
+
 
   return (
     <div style={{ position: "relative", width: "50px", height: "50px" }}>
@@ -76,8 +101,8 @@ const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
         style={{ position: "absolute", width: "95%", height: "95%", zIndex: 1 }}
         ref={containerRef}
       ></div>
-      <button 
-        disabled={isPlaying}
+      <button
+        disabled={!playerReady || isPlaying}
         style={{
           backgroundColor: "#338FEB",
           position: "absolute",
@@ -87,7 +112,7 @@ const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
           height: "100%",
           border: "none",
           zIndex: 10,
-        }} 
+        }}
         onClick={handlePlay}>
         {isPlaying ? <PauseIcon style={iconStyle} /> : <PlayCircleIcon style={iconStyle} />}
       </button>
@@ -97,4 +122,4 @@ const YoutubePlayer = ({ videoId, introDuration }: YoutubePlayerProps) => {
 
 export default YoutubePlayer;
 
-const iconStyle = { fontSize: "50px", color: "blue", backgroundColor:"white", border:"none" };
+const iconStyle = { fontSize: "50px", color: "blue", backgroundColor: "white", border: "none" };
