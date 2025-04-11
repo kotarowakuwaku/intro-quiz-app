@@ -1,58 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import Quiz from "@/app/components/Quiz";
+import Head from "next/head";
+import Button from "@/app/components/Button";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const videoIds = ["dKPye_tGXFM", "daSwx7663RQ", "6sJ7vXe_oMU"];
-  // const [currentVideoId, ] = useState(videoIds[0]);
-  const [checkInput, setCheckInput] = useState(videoIds.map((id) => {
-    return {
-      videoId: id,
-      value:""
-    }
-  }));
-
-  // const [isGameStarted, setIsGameStarted] = useState(false);
-  // const currentVideoIndex = useRef(0);
-
-  // 使わない
-  // const onIntroEnd = () => {
-  //   const nextIndex = (videoIds.indexOf(currentVideoId) + 1) % videoIds.length;
-  //   if (nextIndex === 0) {
-  //     console.log("All videos played. Restarting from the first video.");
-  //   } else {
-  //     console.log("Next video ID:", videoIds[nextIndex]);
-  //     setCurrentVideoId(videoIds[nextIndex]);
-  //     currentVideoIndex.current = nextIndex;
-  //     console.log(currentVideoId);
-  //   }
-  // };
-
-
+  const router = useRouter();
   return (
-    <main style={{
-      width: "100vw",
-      height: "100vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      flexDirection: "column", // 下にボタンを置きたいとき
-    }}>
-      {checkInput.map((item, index) => {
-        return (
-          <div key={index} style={{ display: "flex", justifyContent: "center", width:"60%" }}>
-            <Quiz title={`${index + 1}問目`} videoId={item.videoId} introDuration={5} id={index} value={item.value} onChange={(newValue) => {
-              const newCheckInput = [...checkInput];
-              newCheckInput[index].value = newValue;
-              setCheckInput(newCheckInput);
-            }}/>
-          </div>
-        )
-      })}
-      <button onClick={()=>{
-        console.log(checkInput);
-      }}>aaaa</button>
-    </main>
+    <>
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet" />
+      </Head>
+
+      <main
+        style={{
+          width: "100%",
+          height: "100vh",
+          backgroundColor: "#86B3B0",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "5em",
+            color: "white",
+            fontFamily: "Concert+One, sans-serif",
+            fontWeight: 600,
+            fontStyle: "normal",
+            textAlign: "center",
+          }}
+        >
+          INTRO QUIZ
+        </h1>
+        <div style={{
+          marginTop: "2em",
+          
+        }}>
+          <Button label="Start" onClick={() => {
+            router.push("/questionCollection");
+          }} />
+        </div>
+      </main>
+    </>
   );
 }
