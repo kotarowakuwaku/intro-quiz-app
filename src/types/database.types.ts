@@ -13,20 +13,23 @@ export type Database = {
         Row: {
           created_at: string
           id: number
+          introDuration: number | null
           name: string | null
-          spotifyURL: string | null
+          number_of_questions: number | null
         }
         Insert: {
           created_at?: string
           id?: number
+          introDuration?: number | null
           name?: string | null
-          spotifyURL?: string | null
+          number_of_questions?: number | null
         }
         Update: {
           created_at?: string
           id?: number
+          introDuration?: number | null
           name?: string | null
-          spotifyURL?: string | null
+          number_of_questions?: number | null
         }
         Relationships: []
       }
