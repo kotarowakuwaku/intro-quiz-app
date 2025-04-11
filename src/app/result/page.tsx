@@ -63,7 +63,7 @@ const Page = () => {
                 </div>
                 <Button label="クイズ一覧に戻る" onClick={() => {
                     localStorage.clear();
-                    window.location.href = "/questionscollection";
+                    window.location.href = "/questionCollection";
                 }} />
 
             </main>
