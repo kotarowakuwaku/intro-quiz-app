@@ -39,9 +39,10 @@ export default function Home() {
         </h1>
         <div style={{
           marginTop: "2em",
-          
+          width:"200px",
+          height:"50px",
         }}>
-          <Button label="Start" onClick={() => {
+          <Button label="Start" fontSize="1.5rem" onClick={() => {
             router.push("/questionCollection");
           }} />
         </div>
