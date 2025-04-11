@@ -1,6 +1,5 @@
 "use client";
 
-import Head from "next/head";
 import Button from "@/app/components/Button";
 import { useRouter } from "next/navigation";
 
@@ -8,12 +7,6 @@ export default function Home() {
   const router = useRouter();
   return (
     <>
-      <Head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet" />
-      </Head>
-
       <main
         style={{
           width: "100%",
